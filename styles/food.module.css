@@ -1,0 +1,16 @@
+.foodCard {
+  border-radius: 3px;
+  box-shadow: 1px 1px 5px rgb(201, 201, 201);
+  margin: 1rem auto;
+  overflow: hidden;
+  width: 20rem;
+}
+
+.foodCardBody {
+  padding: 0.5rem;
+}
+
+.foodCardRate {
+  font-weight: 700;
+  color: rgb(253, 150, 15);
+}
