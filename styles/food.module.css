@@ -14,3 +14,20 @@
   font-weight: 700;
   color: rgb(253, 150, 15);
 }
+
+.foodSearchFieldContainer {
+  margin: 0 auto;
+  width: 20rem;
+}
+
+.foodSearchField {
+  display: block;
+  padding: 0.5rem;
+  width: 100%;
+  border: 1px solid rgb(253, 150, 15);
+  outline: none;
+}
+
+.foodSearchField:focus-within {
+  border: 1px solid rgb(253, 150, 15);
+}
