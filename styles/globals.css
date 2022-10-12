@@ -2,12 +2,14 @@
   --orange: rgb(253, 150, 15);
   --body: #fff;
   --text-color: #000;
+  --shadow: rgb(201, 201, 201);
 }
 
 [data-theme="dark"] {
   --orange: rgb(253, 150, 15);
-  --body: #000;
+  --body: rgb(37, 37, 37);
   --text-color: #fff;
+  --shadow: #000;
 }
 
 body {
@@ -19,6 +21,7 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   line-height: 1.6;
   font-size: 18px;
+  transition: all ease-in 0.2s;
 }
 
 * {
@@ -41,4 +44,10 @@ img {
 
 p {
   margin: 0;
+}
+
+.toggleThemeButton {
+  right: 1rem;
+  position: fixed;
+  top: 1rem;
 }

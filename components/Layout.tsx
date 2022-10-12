@@ -1,4 +1,4 @@
-import { PropsWithChildren, FC } from "react";
+import { PropsWithChildren, FC, useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,13 +9,31 @@ type Props = PropsWithChildren & {
   home: boolean;
 };
 
+type Theme = "light" | "dark";
+
 const name = "Jason Evangelista";
 export const title = "NextJS Sample Website";
 
 const Layout: FC<Props> = (props) => {
   const { children, home } = props;
+  const [theme, setTheme] = useState(true);
+
+  const handleThemeToggle = () => setTheme(!theme);
+
+  useEffect(() => {
+    const dataTheme = document.body.dataset.theme as Theme;
+    if (dataTheme === "light") {
+      document.body.setAttribute("data-theme", "dark");
+    } else {
+      document.body.setAttribute("data-theme", "light");
+    }
+  }, [theme]);
+
   return (
     <div className={styles.container}>
+      <button className="toggleThemeButton" onClick={handleThemeToggle}>
+        Theme
+      </button>
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta
@@ -31,6 +49,7 @@ const Layout: FC<Props> = (props) => {
         <meta name="og:title" content={title} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
+
       <header className={styles.header}>
         {home ? (
           <>
