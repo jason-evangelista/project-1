@@ -58,3 +58,7 @@
 .textCenter {
   text-align: center;
 }
+
+.my-2 {
+  margin: 0.5rem auto;
+}

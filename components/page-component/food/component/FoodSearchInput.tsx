@@ -1,13 +1,10 @@
-import { Dispatch, FC, FormEvent, SetStateAction } from "react";
+import { FC, FormEvent, memo } from "react";
 import style from "../../../../styles/food.module.css";
 type Props = {
-  handleSearchField: Dispatch<SetStateAction<string>>;
+  handleSearchField: (e: FormEvent<HTMLInputElement>) => void;
 };
 const FoodSearchInput: FC<Props> = (props) => {
   const { handleSearchField } = props;
-
-  const handleOnInput = (e: FormEvent<HTMLInputElement>) =>
-    handleSearchField(e.currentTarget.value);
 
   return (
     <div className={style.foodSearchFieldContainer}>
@@ -15,10 +12,10 @@ const FoodSearchInput: FC<Props> = (props) => {
         className={style.foodSearchField}
         type="text"
         placeholder="Search my Favorite Food"
-        onInput={(e) => handleOnInput(e)}
+        onInput={(e) => handleSearchField(e)}
       />
     </div>
   );
 };
 
-export default FoodSearchInput;
+export default memo(FoodSearchInput);
