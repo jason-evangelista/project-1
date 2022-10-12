@@ -4,14 +4,18 @@ import { FoodInfo } from "../../../../api/food";
 
 import style from "../../../../styles/food.module.css";
 import utilStyle from "../../../../styles/utils.module.css";
+import { ShowImageProps } from "../Food";
 
-type Props = FoodInfo;
+type Props = FoodInfo & {
+  handleShowImage: (params: ShowImageProps) => void;
+};
 
 const FoodCard: FC<Props> = (props) => {
-  const { description, image, rate, title } = props;
+  const { description, image, rate, title, handleShowImage } = props;
 
+  const handleOnShowImage = () => handleShowImage({ imageSrc: image, title });
   return (
-    <div className={style.foodCard}>
+    <div className={style.foodCard} onClick={handleOnShowImage}>
       <div className={utilStyle.relative}>
         <Image
           src={image}
