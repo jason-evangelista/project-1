@@ -6,10 +6,20 @@ import FoodSearchInput from "./component/FoodSearchInput";
 import utilStyle from "../../../styles/utils.module.css";
 import style from "../../../styles/food.module.css";
 import FoodSorterButton from "./component/FoodSorterButton";
+import FoodImageContainer from "./component/FoodImageContainer";
+
+export type ShowImageProps = {
+  title: string;
+  imageSrc: string;
+};
 
 const Food: FC = () => {
   const [food, setFood] = useState<FoodInfo[]>(foodList);
   const [toggleSort, setToggleSort] = useState(true);
+  const [showImage, setShowImage] = useState<ShowImageProps>({
+    imageSrc: "",
+    title: "",
+  });
 
   const handleSearchFoodFilter = useCallback(
     (e: FormEvent<HTMLInputElement>) => {
@@ -25,6 +35,14 @@ const Food: FC = () => {
     },
     [food]
   );
+
+  const handleSetShowImage = useCallback((params: ShowImageProps) => {
+    setShowImage(params);
+  }, []);
+
+  const handleImageClose = useCallback(() => {
+    setShowImage({ imageSrc: "", title: "" });
+  }, []);
 
   const handleFoodListSort = useCallback(() => {
     const sortedFoodList: FoodInfo[] = [];
@@ -55,8 +73,19 @@ const Food: FC = () => {
           <h1 className={utilStyle.textCenter}>Empty Result</h1>
         ) : (
           <>
+            {showImage.imageSrc && (
+              <FoodImageContainer
+                {...showImage}
+                handleCloseImage={handleImageClose}
+              />
+            )}
+
             {food.map((item) => (
-              <FoodCard {...item} key={item.title} />
+              <FoodCard
+                {...item}
+                key={item.title}
+                handleShowImage={handleSetShowImage}
+              />
             ))}
           </>
         )}

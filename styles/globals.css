@@ -3,6 +3,7 @@
   --body: #fff;
   --text-color: #000;
   --shadow: rgb(201, 201, 201);
+  --backdrop: rgba(80, 80, 80, 0.5);
 }
 
 [data-theme="dark"] {
@@ -10,6 +11,7 @@
   --body: rgb(37, 37, 37);
   --text-color: #fff;
   --shadow: #000;
+  --backdrop: rgba(0, 0, 0, 0.7);
 }
 
 body {
