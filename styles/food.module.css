@@ -1,9 +1,12 @@
+.foodListContainer {
+  margin: 0 auto;
+  width: 20rem;
+}
 .foodCard {
   border-radius: 3px;
   box-shadow: 1px 1px 5px rgb(201, 201, 201);
   margin: 1rem auto;
   overflow: hidden;
-  width: 20rem;
 }
 
 .foodCardBody {
@@ -24,10 +27,16 @@
   display: block;
   padding: 0.5rem;
   width: 100%;
-  border: 1px solid rgb(253, 150, 15);
+  border: 1px solid var(--orange);
   outline: none;
 }
 
 .foodSearchField:focus-within {
-  border: 1px solid rgb(253, 150, 15);
+  border: 1px solid var(--orange);
+}
+
+.foodSorterContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
