@@ -1,7 +1,7 @@
 import { FC, memo, useState } from "react";
 import Image from "next/image";
 
-import style from "../../../../styles/food.module.css";
+import style from "@styles/food.module.css";
 import { ShowImageProps } from "../Food";
 
 type Props = ShowImageProps & {

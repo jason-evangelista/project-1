@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC } from "react";
 import style from "@styles/food.module.css";
 import utilStyle from "@styles/utils.module.css";
 import FoodForm from "./FoodForm";
@@ -7,12 +7,11 @@ import { FoodInfo } from "@api/food";
 type Props = {
   handleToggleFormModal: () => void;
   toggleModal: boolean;
-  setFood: Dispatch<SetStateAction<FoodInfo[]>>;
-  food: FoodInfo[];
+  handleAddNewFood: (data: FoodInfo) => void;
 };
 
 const FoodFormModal: FC<Props> = (props) => {
-  const { toggleModal, handleToggleFormModal, setFood, food } = props;
+  const { toggleModal, handleToggleFormModal, handleAddNewFood } = props;
 
   if (!toggleModal) return null;
 
@@ -26,9 +25,8 @@ const FoodFormModal: FC<Props> = (props) => {
         <hr />
         <div>
           <FoodForm
-            setFood={setFood}
-            food={food}
             handleToggleModalForm={handleToggleFormModal}
+            handleAddNewFood={handleAddNewFood}
           />
         </div>
       </div>

@@ -1,10 +1,10 @@
-import Image from "next/image";
 import { FC } from "react";
-import { FoodInfo } from "../../../../api/food";
-
-import style from "../../../../styles/food.module.css";
-import utilStyle from "../../../../styles/utils.module.css";
+import { FoodInfo } from "@api/food";
 import { ShowImageProps } from "../Food";
+
+import Image from "next/image";
+import style from "@styles/food.module.css";
+import utilStyle from "@styles/utils.module.css";
 
 type Props = FoodInfo & {
   handleShowImage: (params: ShowImageProps) => void;
@@ -15,7 +15,11 @@ const FoodCard: FC<Props> = (props) => {
 
   const handleOnShowImage = () => handleShowImage({ imageSrc: image, title });
   return (
-    <div className={style.foodCard} onClick={handleOnShowImage}>
+    <div
+      className={style.foodCard}
+      onClick={handleOnShowImage}
+      data-testid="food-card"
+    >
       <div className={utilStyle.relative}>
         <Image
           src={image}

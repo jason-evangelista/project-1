@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { FoodInfo } from "@api/food";
 
@@ -7,9 +7,8 @@ import FormGroup from "@components/FormGroup";
 import Notify from "@api/notify";
 
 type Props = {
-  setFood: Dispatch<SetStateAction<FoodInfo[]>>;
-  food: FoodInfo[];
   handleToggleModalForm: () => void;
+  handleAddNewFood: (data: FoodInfo) => void;
 };
 
 type FormField = FoodInfo;
@@ -22,7 +21,7 @@ const formFieldDefaultValue: FormField = {
 };
 
 const FoodForm: FC<Props> = (props) => {
-  const { setFood, food, handleToggleModalForm } = props;
+  const { handleToggleModalForm, handleAddNewFood } = props;
   const {
     register,
     handleSubmit,
@@ -44,7 +43,7 @@ const FoodForm: FC<Props> = (props) => {
 
   const onFoodSubmit = () => {
     const data = getValues();
-    setFood([...food, { ...data }]);
+    handleAddNewFood(data);
     Notify("Food Added", null, "success");
     handleToggleModalForm();
   };
@@ -52,6 +51,7 @@ const FoodForm: FC<Props> = (props) => {
   return (
     <form onSubmit={handleSubmit(onFoodSubmit)}>
       <FormGroup
+        id={titleField.name}
         formLabel="Title"
         placeholder="Enter the food title"
         type="text"
@@ -61,6 +61,7 @@ const FoodForm: FC<Props> = (props) => {
         errorMessage={errors.title?.message}
       />
       <FormGroup
+        id={imageUrlField.name}
         formLabel="Image URL"
         placeholder="Enter food image url"
         type="text"
@@ -70,9 +71,9 @@ const FoodForm: FC<Props> = (props) => {
         errorMessage={errors.image?.message}
       />
       <div>
-        <label htmlFor="foodDescription">Food Description</label>
+        <label htmlFor={descriptionField.name}>Food Description</label>
         <textarea
-          id="foodDescription"
+          id={descriptionField.name}
           placeholder="Enter food description"
           className={style.formGroupTextArea}
           rows={5}
@@ -85,6 +86,7 @@ const FoodForm: FC<Props> = (props) => {
         )}
       </div>
       <FormGroup
+        id={rateField.name}
         formLabel="Rate"
         type="number"
         placeholder="Enter food rate"
