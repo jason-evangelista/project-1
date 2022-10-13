@@ -1,9 +1,10 @@
 import { PropsWithChildren, FC, useState, useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import styles from "../styles/layout.module.css";
-import utilStyles from "../styles/utils.module.css";
+import styles from "@styles/layout.module.css";
+import utilStyles from "@styles/utils.module.css";
 
 type Props = PropsWithChildren & {
   home: boolean;
@@ -31,6 +32,7 @@ const Layout: FC<Props> = (props) => {
 
   return (
     <div className={styles.container}>
+      <ToastContainer />
       <button className="toggleThemeButton" onClick={handleThemeToggle}>
         Theme
       </button>

@@ -1,5 +1,5 @@
 import { FC, FormEvent, memo } from "react";
-import style from "../../../../styles/food.module.css";
+import style from "@styles/food.module.css";
 type Props = {
   handleSearchField: (e: FormEvent<HTMLInputElement>) => void;
 };

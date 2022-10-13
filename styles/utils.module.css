@@ -62,3 +62,37 @@
 .my-2 {
   margin: 0.5rem auto;
 }
+
+.flexBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.formGroupContainer {
+  width: 100%;
+  margin: 1rem auto;
+}
+
+.formGroupContainer > input {
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.formGroupTextArea {
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.formGroupBtn {
+  padding: 0.5rem;
+  width: 100%;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.errorMessage {
+  color: #b61919;
+  font-weight: 500;
+  font-size: small;
+}

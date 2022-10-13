@@ -30,14 +30,7 @@ const foodList: FoodInfo[] = [
       "Kaldereta or caldereta is a goat meat stew from the Philippines. Variations of the dish use beef, chicken, or pork. Commonly, the goat meat is stewed with vegetables and liver paste. Vegetables may include tomatoes, potatoes, olives, bell peppers, and hot peppers. Kaldereta sometimes includes tomato sauce.",
     rate: 4,
   },
-  {
-    title: "Tinola",
-    image:
-      "http://images.summitmedia-digital.com/yummyph/images/2020/06/29/KNR_0035.jpg",
-    description:
-      "Tinola is a Filipino soup usually served as a main entrée with white rice. Traditionally, this dish is cooked with chicken or fish, wedges of papaya, and leaves of the siling labuyo chili pepper in broth flavored with ginger, onions and fish sauce.",
-    rate: 3,
-  },
+
   {
     title: "Lechon Manok",
     image:
