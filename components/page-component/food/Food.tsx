@@ -1,12 +1,13 @@
-import { FC, FormEvent, useCallback, useState } from "react";
-import Layout from "../../Layout";
-import foodList, { FoodInfo } from "../../../api/food";
+import { FC, FormEvent, useCallback, useEffect, useState } from "react";
+import Layout from "@components/Layout";
+import { FoodInfo } from "@api/food";
 import FoodCard from "./component/FoodCard";
 import FoodSearchInput from "./component/FoodSearchInput";
-import utilStyle from "../../../styles/utils.module.css";
-import style from "../../../styles/food.module.css";
+import utilStyle from "@styles/utils.module.css";
+import style from "@styles/food.module.css";
 import FoodSorterButton from "./component/FoodSorterButton";
 import FoodImageContainer from "./component/FoodImageContainer";
+import FoodFormModal from "./component/FoodFormModal";
 
 export type ShowImageProps = {
   title: string;
@@ -14,24 +15,24 @@ export type ShowImageProps = {
 };
 
 const Food: FC = () => {
-  const [food, setFood] = useState<FoodInfo[]>(foodList);
+  const [food, setFood] = useState<FoodInfo[]>([]);
   const [toggleSort, setToggleSort] = useState(true);
   const [showImage, setShowImage] = useState<ShowImageProps>({
     imageSrc: "",
     title: "",
   });
+  const [renderedFoodList, setRenderedFoodList] = useState<FoodInfo[]>([]);
+
+  const [toggleModal, setToggleModal] = useState(false);
 
   const handleSearchFoodFilter = useCallback(
     (e: FormEvent<HTMLInputElement>) => {
       const value = e.currentTarget.value;
 
-      if (!value) return setFood(foodList);
-
       const result = food.filter((item) =>
         item.title.match(new RegExp(value, "i"))
       );
-      setFood(result);
-      return result;
+      setRenderedFoodList(result);
     },
     [food]
   );
@@ -44,7 +45,7 @@ const Food: FC = () => {
     setShowImage({ imageSrc: "", title: "" });
   }, []);
 
-  const handleFoodListSort = useCallback(() => {
+  const handleFoodListSort = () => {
     const sortedFoodList: FoodInfo[] = [];
     if (!toggleSort) {
       const result = food.sort((item1, item2) => item1.rate - item2.rate);
@@ -53,17 +54,29 @@ const Food: FC = () => {
       const result = food.sort((item1, item2) => item2.rate - item1.rate);
       sortedFoodList.push(...result);
     }
-    setFood(sortedFoodList);
+    setRenderedFoodList(sortedFoodList);
     setToggleSort(!toggleSort);
-  }, [food, toggleSort]);
+  };
+
+  const handleToggleModal = () => setToggleModal(!toggleModal);
 
   const isEmptyResult = !food.length;
 
+  useEffect(() => {
+    setRenderedFoodList(food);
+  }, [food]);
   return (
     <Layout home={false}>
+      <FoodFormModal
+        toggleModal={toggleModal}
+        handleToggleFormModal={handleToggleModal}
+        setFood={setFood}
+        food={food}
+      />
       <div className={style.foodListContainer}>
         <FoodSearchInput handleSearchField={handleSearchFoodFilter} />
         <div className={`${style.foodSorterContainer} ${utilStyle["my-2"]}`}>
+          <button onClick={handleToggleModal}>Add Food</button>
           <FoodSorterButton
             handleSortFoodList={handleFoodListSort}
             toggle={toggleSort}
@@ -80,7 +93,7 @@ const Food: FC = () => {
               />
             )}
 
-            {food.map((item) => (
+            {renderedFoodList.map((item) => (
               <FoodCard
                 {...item}
                 key={item.title}
