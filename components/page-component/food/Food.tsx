@@ -1,4 +1,12 @@
-import { FC, FormEvent, useCallback, useEffect, useState } from "react";
+import {
+  Dispatch,
+  FC,
+  FormEvent,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import Layout from "@components/Layout";
 import { FoodInfo } from "@api/food";
 import FoodCard from "./component/FoodCard";
@@ -14,8 +22,13 @@ export type ShowImageProps = {
   imageSrc: string;
 };
 
-const Food: FC = () => {
-  const [food, setFood] = useState<FoodInfo[]>([]);
+type Props = {
+  food: FoodInfo[];
+  setFood: Dispatch<SetStateAction<FoodInfo[]>>;
+};
+
+const Food: FC<Props> = (props) => {
+  const { food, setFood } = props;
   const [toggleSort, setToggleSort] = useState(true);
   const [showImage, setShowImage] = useState<ShowImageProps>({
     imageSrc: "",
@@ -37,13 +50,13 @@ const Food: FC = () => {
     [food]
   );
 
-  const handleSetShowImage = useCallback((params: ShowImageProps) => {
+  const handleSetShowImage = (params: ShowImageProps) => {
     setShowImage(params);
-  }, []);
+  };
 
-  const handleImageClose = useCallback(() => {
+  const handleImageClose = () => {
     setShowImage({ imageSrc: "", title: "" });
-  }, []);
+  };
 
   const handleFoodListSort = () => {
     const sortedFoodList: FoodInfo[] = [];
@@ -60,6 +73,10 @@ const Food: FC = () => {
 
   const handleToggleModal = () => setToggleModal(!toggleModal);
 
+  const handleAddNewFood = (data: FoodInfo) => {
+    setFood([...food, { ...data }]);
+  };
+
   const isEmptyResult = !food.length;
 
   useEffect(() => {
@@ -70,8 +87,7 @@ const Food: FC = () => {
       <FoodFormModal
         toggleModal={toggleModal}
         handleToggleFormModal={handleToggleModal}
-        setFood={setFood}
-        food={food}
+        handleAddNewFood={handleAddNewFood}
       />
       <div className={style.foodListContainer}>
         <FoodSearchInput handleSearchField={handleSearchFoodFilter} />
