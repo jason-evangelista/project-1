@@ -1,5 +1,4 @@
 import { DetailedHTMLProps, forwardRef, InputHTMLAttributes } from "react";
-
 import style from "@styles/utils.module.css";
 
 type Props = DetailedHTMLProps<
