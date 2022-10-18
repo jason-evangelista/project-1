@@ -1,4 +1,8 @@
-import type { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 import Head from "next/head";
 import Layout, { title } from "../components/Layout";
 import utilStyles from "../styles/utils.module.css";
@@ -9,7 +13,7 @@ type Props = {
   getPosts: PostReturn[];
 };
 
-export const getServerSideProps: GetStaticProps<Props> = async () => {
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const getPosts = await parsePosts();
   return {
     props: {
@@ -18,7 +22,7 @@ export const getServerSideProps: GetStaticProps<Props> = async () => {
   };
 };
 
-const Home: NextPage<InferGetStaticPropsType<typeof getServerSideProps>> = (
+const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   props
 ) => {
   const { getPosts } = props;
