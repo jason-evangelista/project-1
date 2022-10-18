@@ -9,8 +9,7 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
       .status(405)
       .json({ error: "This request only accepts POST method" });
   try {
-    const { username, email, password, confirmPassword } =
-      req.body as SignUpBody;
+    const { username, email, password } = req.body as SignUpBody;
     const checkUser = await prisma.user.findUnique({ where: { email } });
 
     if (checkUser)
