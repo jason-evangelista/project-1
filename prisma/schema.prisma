@@ -28,6 +28,7 @@ model Food {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   user_id     String
+  isPublic    Boolean
   User        User     @relation(fields: [user_id], references: [id])
 
   @@map("foods")

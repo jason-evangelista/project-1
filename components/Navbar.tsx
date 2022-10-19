@@ -1,11 +1,13 @@
 import {
   Avatar,
+  Button,
   Container,
   Group,
   Menu,
   Text,
   UnstyledButton,
 } from "@mantine/core";
+import { NextLink } from "@mantine/next";
 import { signOut } from "next-auth/react";
 import { FC } from "react";
 
@@ -33,6 +35,30 @@ const NavBar: FC<Props> = (props) => {
         <h3>Food Blog</h3>
       </Group>
       <Group>
+        <Button
+          component={NextLink}
+          href="/dashboard"
+          variant="light"
+          sx={{
+            ":hover": {
+              textDecoration: "none",
+            },
+          }}
+        >
+          Home
+        </Button>
+        <Button
+          component={NextLink}
+          href="/dashboard/create-food"
+          variant="light"
+          sx={{
+            ":hover": {
+              textDecoration: "none",
+            },
+          }}
+        >
+          Create Food
+        </Button>
         <Menu>
           <Menu.Target>
             <UnstyledButton sx={{ display: "flex", alignItems: "center" }}>

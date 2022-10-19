@@ -11,13 +11,40 @@ import { useEffect } from "react";
 import Head from "next/head";
 import SessionReturn from "@type/session";
 import Dashboard from "@components/page-component/dashboard/Dashboard";
+import DashBoardLayout from "@components/DashboardLayout";
+import prisma from "@prisma/prisma-client";
+import FoodListType from "@components/page-component/dashboard/type/FoodListType";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext<SessionReturn>
 ) => {
+  const session = await getSession(context);
+
+  const getUser = await prisma.user.findUnique({
+    where: { email: session?.user?.email || "" },
+  });
+
+  const food = await prisma.food.findMany({
+    include: {
+      User: {
+        select: {
+          user_name: true,
+        },
+      },
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+  });
+
+  const filterFood = food.filter(
+    (item) => item.user_id === getUser?.id || item.isPublic
+  );
+
   return {
     props: {
-      session: await getSession(context),
+      session,
+      food: JSON.parse(JSON.stringify(filterFood)) as FoodListType[],
     },
   };
 };
@@ -25,7 +52,7 @@ export const getServerSideProps = async (
 const DashBoardPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = (props) => {
-  const { session } = props;
+  const { session, food } = props;
   const router = useRouter();
 
   useEffect(() => {
@@ -38,7 +65,9 @@ const DashBoardPage: NextPage<
         <Head>
           <title>Dashboard</title>
         </Head>
-        <Dashboard />
+        <DashBoardLayout session={session}>
+          <Dashboard food={food} />
+        </DashBoardLayout>
       </>
     )
   );
