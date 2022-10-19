@@ -1,71 +1,48 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-  NextPage,
-} from "next";
-
-import { getSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { NextPage } from "next";
 import Head from "next/head";
-import SessionReturn from "@type/session";
 import Dashboard from "@components/page-component/dashboard/Dashboard";
 import DashBoardLayout from "@components/DashboardLayout";
 import prisma from "@prisma/prisma-client";
 import FoodListType from "@components/page-component/dashboard/type/FoodListType";
+import { User } from "@supabase/auth-helpers-react";
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext<SessionReturn>
-) => {
-  const session = await getSession(context);
-
-  const getUser = await prisma.user.findUnique({
-    where: { email: session?.user?.email || "" },
-  });
-
-  const food = await prisma.food.findMany({
-    include: {
-      User: {
-        select: {
-          user_name: true,
+export const getServerSideProps = withPageAuth({
+  redirectTo: "/auth/sign-in",
+  getServerSideProps: async () => {
+    const food = await prisma.food.findMany({
+      include: {
+        User: {
+          select: {
+            user_name: true,
+          },
         },
       },
-    },
-    orderBy: {
-      created_at: "desc",
-    },
-  });
+      orderBy: {
+        created_at: "desc",
+      },
+    });
 
-  const filterFood = food.filter(
-    (item) => item.user_id === getUser?.id || item.isPublic
-  );
+    return {
+      props: {
+        food: JSON.parse(JSON.stringify(food)) as FoodListType[],
+      },
+    };
+  },
+});
 
-  return {
-    props: {
-      session,
-      food: JSON.parse(JSON.stringify(filterFood)) as FoodListType[],
-    },
-  };
-};
-
-const DashBoardPage: NextPage<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> = (props) => {
-  const { session, food } = props;
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!session) router.replace("/auth/sign-in");
-  }, [router, session]);
+const DashBoardPage: NextPage<{ user: User; food: FoodListType[] }> = (
+  props
+) => {
+  const { food, user } = props;
 
   return (
-    session && (
+    user && (
       <>
         <Head>
           <title>Dashboard</title>
         </Head>
-        <DashBoardLayout session={session}>
+        <DashBoardLayout user={user}>
           <Dashboard food={food} />
         </DashBoardLayout>
       </>

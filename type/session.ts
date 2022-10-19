@@ -1,8 +1,10 @@
-import { Session } from "next-auth";
-import { ParsedUrlQuery } from "querystring";
-
-type SessionReturn = ParsedUrlQuery & {
-  session: Promise<Session | null>;
-};
+import { Session } from "@supabase/auth-helpers-react";
+type SessionReturn =
+  | {
+      session: Session;
+    }
+  | {
+      session: null;
+    };
 
 export default SessionReturn;
