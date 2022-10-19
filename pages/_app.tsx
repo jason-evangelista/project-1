@@ -7,6 +7,7 @@ import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import { MantineProvider } from "@mantine/core";
 import { ToastContainer } from "react-toastify";
+
 const MyApp = ({ Component, pageProps }: AppProps<{ session: Session }>) => {
   return (
     <SessionProvider session={pageProps.session}>

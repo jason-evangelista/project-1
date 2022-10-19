@@ -21,7 +21,8 @@
       "@api/*": ["api/*"],
       "@pages/*": ["pages/*"],
       "@prisma/*": ["prisma/*"],
-      "@type/*": ["type/*"]
+      "@type/*": ["type/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/parsePosts.ts"],

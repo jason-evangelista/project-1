@@ -33,9 +33,8 @@ const SignIn: FC = () => {
     });
 
     if (data?.error) return Notify(data.error, null, "error");
-
-    return router.replace("/dashboard");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    router.replace("/dashboard");
+    return;
   };
 
   return (

@@ -1,10 +1,22 @@
-import NavBar from "@components/Navbar";
+import { Session } from "next-auth";
 import { FC } from "react";
+import { Center, Divider } from "@mantine/core";
+import FoodList from "./components/FoodList";
+import FoodListType from "./type/FoodListType";
+type Props = {
+  session?: Session;
+  food: FoodListType[];
+};
 
-const Dashboard: FC = () => {
+const Dashboard: FC<Props> = (props) => {
+  const { food } = props;
+
   return (
     <>
-      <NavBar name="Jason Evangelista" />
+      <Divider mb="xl" />
+      <Center>
+        <FoodList food={food} />
+      </Center>
     </>
   );
 };
