@@ -25,10 +25,10 @@ model Food {
   description String
   cover_photo String
   rate        Int
-  isPublic    Boolean
-  user_id     String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+  user_id     String
+  isPublic    Boolean
   User        User     @relation(fields: [user_id], references: [id])
 
   @@map("foods")

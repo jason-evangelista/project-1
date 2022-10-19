@@ -20,7 +20,7 @@
     "@mantine/next": "^5.5.5",
     "@mantine/notifications": "^5.5.5",
     "@mantine/nprogress": "^5.5.5",
-    "@prisma/client": "^4.4.0",
+    "@prisma/client": "^4.5.0",
     "@supabase/supabase-js": "^2.0.0",
     "@types/bcrypt": "^5.0.0",
     "axios": "^1.1.3",
