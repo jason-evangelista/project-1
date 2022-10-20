@@ -1,47 +1,26 @@
-import DashBoardLayout from "@components/DashboardLayout";
+import { User } from "@supabase/auth-helpers-react";
+import { NextPage } from "next";
 import CreateFood from "@components/page-component/dashboard/create-food/CreateFood";
-import SessionReturn from "@type/session";
-import {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-  NextPage,
-} from "next";
-import { getSession } from "next-auth/react";
+import DashBoardLayout from "@components/DashboardLayout";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext<SessionReturn>
-) => {
-  return {
-    props: {
-      session: await getSession(context),
-    },
-  };
-};
+export const getServerSideProps = withPageAuth({
+  redirectTo: "/auth/sign-in",
+});
 
-const CreateFoodPage: NextPage<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> = (props) => {
-  const { session } = props;
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!session) router.replace("/auth/sign-in");
-  }, [session, router]);
+const CreateFoodPage: NextPage<{ user: User }> = (props) => {
+  const { user } = props;
 
   return (
-    session && (
-      <>
-        <Head>
-          <title>Create Food</title>
-        </Head>
-        <DashBoardLayout session={session}>
-          <CreateFood />
-        </DashBoardLayout>
-      </>
-    )
+    <>
+      <Head>
+        <title>Create Food</title>
+      </Head>
+      <DashBoardLayout user={user}>
+        <CreateFood />
+      </DashBoardLayout>
+    </>
   );
 };
 

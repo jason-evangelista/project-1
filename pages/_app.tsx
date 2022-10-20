@@ -3,14 +3,24 @@ import "normalize.css/normalize.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import type { AppProps } from "next/app";
-import { SessionProvider } from "next-auth/react";
-import { Session } from "next-auth";
 import { MantineProvider } from "@mantine/core";
 import { ToastContainer } from "react-toastify";
 
-const MyApp = ({ Component, pageProps }: AppProps<{ session: Session }>) => {
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { SessionContextProvider, Session } from "@supabase/auth-helpers-react";
+import { useState } from "react";
+
+const MyApp = ({
+  Component,
+  pageProps,
+}: AppProps<{ initialSession: Session }>) => {
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+
   return (
-    <SessionProvider session={pageProps.session}>
+    <SessionContextProvider
+      supabaseClient={supabaseClient}
+      initialSession={pageProps.initialSession}
+    >
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
@@ -19,7 +29,7 @@ const MyApp = ({ Component, pageProps }: AppProps<{ session: Session }>) => {
         <ToastContainer />
         <Component {...pageProps} />
       </MantineProvider>
-    </SessionProvider>
+    </SessionContextProvider>
   );
 };
 

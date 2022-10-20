@@ -1,11 +1,20 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import CreateFoodType from "@components/page-component/dashboard/create-food/type/create-food";
 import prisma from "@prisma/prisma-client";
 import supabase from "@utils/supabase";
 
 const createFood = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getSession({ req });
+  const supabaseServer = createServerSupabaseClient({ req, res });
+  const session = await supabaseServer.auth.getSession();
+
+  if (!session.data.session)
+    return res.status(401).json({ message: "Unauthorized" });
+
+  const user = await supabase.auth.admin.getUserById(
+    session.data.session.user.id
+  );
+
   if (req.method !== "POST")
     return res
       .status(405)
@@ -19,14 +28,7 @@ const createFood = async (req: NextApiRequest, res: NextApiResponse) => {
     .from("food/food_cover_photo")
     .createSignedUrl(parseCoverPhoto, 240 * 3600);
 
-  if (!session || !session.user?.email)
-    return res.status(401).json({ message: "Unauthorized" });
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user?.email },
-  });
-
-  if (!user) return res.status(401).json({ message: "User not found" });
+  if (!session) return res.status(401).json({ message: "User not found" });
 
   await prisma.food.create({
     data: {
@@ -35,7 +37,7 @@ const createFood = async (req: NextApiRequest, res: NextApiResponse) => {
       cover_photo: foodPublicImageUrl.data?.signedUrl || "",
       isPublic,
       rate: Number(rate),
-      user_id: user.id,
+      user_id: user.data.user?.id || "",
     },
   });
 

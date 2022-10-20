@@ -2,14 +2,14 @@ import { FC } from "react";
 import { Button, Container, TextInput, Divider } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import SignUpBody from "./type/SignUpBody";
-import axios from "axios";
 import Notify from "@api/notify";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
 const SignUp: FC = () => {
+  const { supabaseClient } = useSessionContext();
   const router = useRouter();
   const {
     register,
@@ -18,30 +18,25 @@ const SignUp: FC = () => {
     getValues,
   } = useForm<SignUpBody>();
 
-  const userNameField = register("username", {
-    required: "Username is required",
-  });
-
   const emailField = register("email", { required: "Email is required" });
   const passwordField = register("password", {
     required: "Password is required",
   });
 
   const onSignUp = async () => {
-    const data = getValues();
-    try {
-      await axios.post("/api/register", data);
-      await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-      });
-      router.push("/dashboard");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
-      const message = e.response.data.message;
-      Notify(message, null, "error");
-    }
+    const { email, password } = getValues();
+
+    const { count } = await supabaseClient
+      .from("user_profile")
+      .select()
+      .eq("email", email);
+
+    if (count) return Notify("Email already exist", null, "error");
+
+    const { error } = await supabaseClient.auth.signUp({ email, password });
+    if (error) return Notify(error.message, null, "error");
+    router.push("/auth/sign-in");
+    return;
   };
 
   return (
@@ -55,14 +50,6 @@ const SignUp: FC = () => {
       }}
     >
       <form onSubmit={handleSubmit(onSignUp)}>
-        <TextInput
-          placeholder="Username"
-          my="sm"
-          name={userNameField.name}
-          ref={userNameField.ref}
-          onChange={userNameField.onChange}
-          error={errors.username?.message}
-        />
         <TextInput
           placeholder="Email"
           my="sm"

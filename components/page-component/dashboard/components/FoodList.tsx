@@ -47,7 +47,7 @@ const FoodList: FC<Props> = (props) => {
                 Published By:
               </Text>
               <Text size="sm" color="red" weight={700}>
-                {item.User.user_name}
+                {item.User.name}
               </Text>
             </Group>
             <Group position="left" spacing="xs">

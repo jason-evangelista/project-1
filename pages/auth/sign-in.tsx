@@ -1,37 +1,21 @@
-import {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-  NextPage,
-} from "next";
-import { useRouter } from "next/router";
-import { getSession } from "next-auth/react";
-import { useEffect } from "react";
+import { NextPage } from "next";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import SignIn from "@components/page-component/auth/sign-in/SignIn";
 import Head from "next/head";
-import SessionReturn from "@type/session";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext<SessionReturn>
-) => {
-  return {
-    props: {
-      session: await getSession(context),
-    },
-  };
-};
-
-const SignInPage: NextPage<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> = (props) => {
-  const { session } = props;
-
+const SignInPage: NextPage = () => {
+  const { session } = useSessionContext();
   const router = useRouter();
   useEffect(() => {
-    if (session) router.replace("/dashboard");
+    if (session) router.push("/dashboard");
+    return;
   }, [session, router]);
 
-  if (session) return null;
-  return (
+  return session ? (
+    <></>
+  ) : (
     <>
       <Head>
         <title>Sign In</title>

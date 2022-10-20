@@ -1,18 +1,19 @@
-import { Container } from "@mantine/core";
-import { Session } from "next-auth";
 import { FC, PropsWithChildren } from "react";
+import { Container } from "@mantine/core";
+
 import NavBar from "./Navbar";
+import { User } from "@supabase/auth-helpers-nextjs";
 
 type Props = PropsWithChildren & {
-  session: Session;
+  user: User;
 };
 
 const DashBoardLayout: FC<Props> = (props) => {
-  const { session, children } = props;
-  const { user } = session;
+  const { user, children } = props;
+  if (!user) return null;
   return (
     <>
-      <NavBar name={user?.name || ""} />
+      <NavBar name={user.email || ""} />
       <Container>{children}</Container>
     </>
   );

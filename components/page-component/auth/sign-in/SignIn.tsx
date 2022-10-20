@@ -2,15 +2,16 @@ import { FC } from "react";
 import { Button, Container, TextInput, Divider } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
-import Notify from "@api/notify";
 import SignUpBody from "../sign-up/type/SignUpBody";
+import Notify from "@api/notify";
 
 type SignInBody = Pick<SignUpBody, "email" | "password">;
 
 const SignIn: FC = () => {
+  const { supabaseClient } = useSessionContext();
   const router = useRouter();
   const {
     register,
@@ -24,15 +25,25 @@ const SignIn: FC = () => {
     required: "Password is required",
   });
 
+  const handleOnGoogleSignIn = async () => {
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: process.env.OAUTH_REDIRECT,
+      },
+    });
+    if (error) return Notify(error.message, null, "error");
+  };
+
   const onSignIn = async () => {
     const { email, password } = getValues();
-    const data = await signIn("credentials", {
+
+    const { error } = await supabaseClient.auth.signInWithPassword({
       email,
       password,
-      redirect: false,
     });
 
-    if (data?.error) return Notify(data.error, null, "error");
+    if (error) return Notify(error?.message, null, "error");
     router.replace("/dashboard");
     return;
   };
@@ -65,8 +76,11 @@ const SignIn: FC = () => {
           onChange={passwordField.onChange}
           error={errors.password?.message}
         />
-        <Button fullWidth type="submit" loading={isSubmitting}>
+        <Button fullWidth type="submit" mb="sm" loading={isSubmitting}>
           Sign In
+        </Button>
+        <Button fullWidth variant="outline" onClick={handleOnGoogleSignIn}>
+          Sign In with Google
         </Button>
         <Divider
           label="Don't have an account?"

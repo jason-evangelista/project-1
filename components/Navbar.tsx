@@ -1,3 +1,4 @@
+import { FC } from "react";
 import {
   Avatar,
   Button,
@@ -8,8 +9,9 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import { signOut } from "next-auth/react";
-import { FC } from "react";
+import { useRouter } from "next/router";
+import Notify from "@api/notify";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
 type Props = {
   name: string;
@@ -17,9 +19,13 @@ type Props = {
 
 const NavBar: FC<Props> = (props) => {
   const { name = "Jason Evangelista" } = props;
-
+  const { supabaseClient } = useSessionContext();
+  const router = useRouter();
   const handleOnSignOut = async () => {
-    await signOut();
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) return Notify(error.message, null, "error");
+    router.replace("/auth/sign-in");
+    return;
   };
 
   return (
