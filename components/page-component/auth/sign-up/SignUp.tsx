@@ -3,13 +3,13 @@ import { Button, Container, TextInput, Divider } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import SignUpBody from "./type/SignUpBody";
 import Notify from "@api/notify";
-import { useSessionContext } from "@supabase/auth-helpers-react";
 
 const SignUp: FC = () => {
-  const { supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient();
   const router = useRouter();
   const {
     register,
@@ -26,12 +26,14 @@ const SignUp: FC = () => {
   const onSignUp = async () => {
     const { email, password } = getValues();
 
-    const { count } = await supabaseClient
+    const checkUser = await supabaseClient
       .from("user_profile")
-      .select()
+      .select("*")
       .eq("email", email);
 
-    if (count) return Notify("Email already exist", null, "error");
+    console.log(checkUser);
+
+    if (checkUser.data) return Notify("Email already exist", null, "error");
 
     const { error } = await supabaseClient.auth.signUp({ email, password });
     if (error) return Notify(error.message, null, "error");

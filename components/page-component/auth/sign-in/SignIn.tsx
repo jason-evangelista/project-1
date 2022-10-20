@@ -1,9 +1,9 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Button, Container, TextInput, Divider } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import SignUpBody from "../sign-up/type/SignUpBody";
 import Notify from "@api/notify";
@@ -11,14 +11,17 @@ import Notify from "@api/notify";
 type SignInBody = Pick<SignUpBody, "email" | "password">;
 
 const SignIn: FC = () => {
-  const { supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient();
   const router = useRouter();
   const {
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
     getValues,
+    watch,
   } = useForm<SignInBody>();
+
+  const [isMagicLinkSubmitting, setIsMagicLinkSubmitting] = useState(false);
 
   const emailField = register("email", { required: "Email is required" });
   const passwordField = register("password", {
@@ -35,13 +38,30 @@ const SignIn: FC = () => {
     if (error) return Notify(error.message, null, "error");
   };
 
-  const handleFacebookLogin = async () => {
-    const {} = await supabaseClient.auth.signInWithOAuth({
+  const handleFacebookSignIn = async () => {
+    const { error } = await supabaseClient.auth.signInWithOAuth({
       provider: "facebook",
       options: {
         redirectTo: process.env.OUATH_REDIRECT,
       },
     });
+    if (error) return Notify(error.message, null, "error");
+  };
+
+  const handleMagicLinkSignIn = async () => {
+    setIsMagicLinkSubmitting(!isMagicLinkSubmitting);
+    const watchEmail = watch("email");
+    if (!watchEmail) return Notify("Please provide an email", null, "error");
+    const { email } = getValues();
+    const { error } = await supabaseClient.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: process.env.OAUTH_REDIRECT,
+      },
+    });
+    setIsMagicLinkSubmitting(!isMagicLinkSubmitting);
+
+    if (error) return Notify(error.message, null, "error");
   };
 
   const onSignIn = async () => {
@@ -99,12 +119,18 @@ const SignIn: FC = () => {
         <Button
           fullWidth
           variant="outline"
-          onClick={handleFacebookLogin}
+          onClick={handleFacebookSignIn}
           mb="sm"
         >
           Sign In with Facebook
         </Button>
-        <Button fullWidth variant="outline" mb="sm">
+        <Button
+          fullWidth
+          variant="outline"
+          mb="sm"
+          onClick={handleMagicLinkSignIn}
+          loading={isMagicLinkSubmitting}
+        >
           Sign In with Magic Link
         </Button>
         <Divider
