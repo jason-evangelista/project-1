@@ -35,6 +35,15 @@ const SignIn: FC = () => {
     if (error) return Notify(error.message, null, "error");
   };
 
+  const handleFacebookLogin = async () => {
+    const {} = await supabaseClient.auth.signInWithOAuth({
+      provider: "facebook",
+      options: {
+        redirectTo: process.env.OUATH_REDIRECT,
+      },
+    });
+  };
+
   const onSignIn = async () => {
     const { email, password } = getValues();
 
@@ -79,8 +88,24 @@ const SignIn: FC = () => {
         <Button fullWidth type="submit" mb="sm" loading={isSubmitting}>
           Sign In
         </Button>
-        <Button fullWidth variant="outline" onClick={handleOnGoogleSignIn}>
+        <Button
+          fullWidth
+          variant="outline"
+          onClick={handleOnGoogleSignIn}
+          mb="sm"
+        >
           Sign In with Google
+        </Button>
+        <Button
+          fullWidth
+          variant="outline"
+          onClick={handleFacebookLogin}
+          mb="sm"
+        >
+          Sign In with Facebook
+        </Button>
+        <Button fullWidth variant="outline" mb="sm">
+          Sign In with Magic Link
         </Button>
         <Divider
           label="Don't have an account?"
