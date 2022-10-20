@@ -29,7 +29,7 @@ const SignIn: FC = () => {
     const { error } = await supabaseClient.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "http://localhost:3000/dashboard",
+        redirectTo: process.env.OAUTH_REDIRECT,
       },
     });
     if (error) return Notify(error.message, null, "error");
