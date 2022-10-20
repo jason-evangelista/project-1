@@ -1,7 +1,7 @@
-import { Food, User } from "@prisma/client";
+import { Food, UserProfile } from "@prisma/client";
 
 type FoodListType = Food & {
-  User: Pick<User, "user_name">;
+  User: Pick<UserProfile, "name">;
 };
 
 export default FoodListType;

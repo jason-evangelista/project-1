@@ -11,7 +11,6 @@ export const getServerSideProps = withPageAuth({
 
 const CreateFoodPage: NextPage<{ user: User }> = (props) => {
   const { user } = props;
-  console.log(user);
 
   return (
     <>

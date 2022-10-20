@@ -37,6 +37,7 @@ const SignIn: FC = () => {
 
   const onSignIn = async () => {
     const { email, password } = getValues();
+
     const { error } = await supabaseClient.auth.signInWithPassword({
       email,
       password,

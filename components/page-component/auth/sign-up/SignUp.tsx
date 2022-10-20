@@ -25,6 +25,14 @@ const SignUp: FC = () => {
 
   const onSignUp = async () => {
     const { email, password } = getValues();
+
+    const checkUser = await supabaseClient
+      .from("user_profile")
+      .select()
+      .eq("email", email);
+
+    if (checkUser) return Notify("Email already exist", null, "error");
+
     const { error } = await supabaseClient.auth.signUp({ email, password });
     if (error) return Notify(error.message, null, "error");
     router.push("/auth/sign-in");
