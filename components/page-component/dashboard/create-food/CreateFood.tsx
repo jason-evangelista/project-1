@@ -5,7 +5,6 @@ import {
   Container,
   Button,
   Checkbox,
-  FileInput,
 } from "@mantine/core";
 import supabase from "@utils/supabase";
 import axios from "axios";
@@ -21,7 +20,6 @@ const CreateFood: FC = () => {
     formState: { errors, isSubmitting },
     handleSubmit,
     getValues,
-    setValue,
   } = useForm<CreateFoodType>();
 
   const titleField = register("title", { required: "Food title is required" });
@@ -34,10 +32,6 @@ const CreateFood: FC = () => {
   });
   const rateField = register("rate", { required: "Food rate is required" });
   const visibilityField = register("isPublic");
-
-  const handleOnCoverPhotoChange = (payload: File) => {
-    setValue("coverPhoto", payload);
-  };
 
   const handleOnFoodSubmit = async () => {
     const { coverPhoto, ...rest } = getValues();
@@ -72,10 +66,11 @@ const CreateFood: FC = () => {
         label="Food Description"
         error={errors.description?.message}
       />
-      <FileInput
+      <TextInput
         ref={coverPhotoField.ref}
         name={coverPhotoField.name}
-        onChange={handleOnCoverPhotoChange}
+        onChange={coverPhotoField.onChange}
+        type="file"
         label="Food Cover Photo"
         placeholder="Food Cover Photo"
         mb="sm"
