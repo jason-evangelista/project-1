@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,36 +16,15 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@styles/*": [
-        "styles/*"
-      ],
-      "@components/*": [
-        "components/*"
-      ],
-      "@api/*": [
-        "api/*"
-      ],
-      "@pages/*": [
-        "pages/*"
-      ],
-      "@prisma/*": [
-        "prisma/*"
-      ],
-      "@type/*": [
-        "type/*"
-      ],
-      "@utils/*": [
-        "utils/*"
-      ]
+      "@styles/*": ["styles/*"],
+      "@components/*": ["components/*"],
+      "@api/*": ["api/*"],
+      "@pages/*": ["pages/*"],
+      "@prisma/*": ["prisma/*"],
+      "@type/*": ["type/*"],
+      "@utils/*": ["utils/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "utils/parsePosts.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/parsePosts.ts"],
+  "exclude": ["node_modules", "cypress"]
 }
