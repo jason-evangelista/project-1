@@ -67,7 +67,10 @@ const NavBar: FC<Props> = (props) => {
         </Button>
         <Menu>
           <Menu.Target>
-            <UnstyledButton sx={{ display: "flex", alignItems: "center" }}>
+            <UnstyledButton
+              sx={{ display: "flex", alignItems: "center" }}
+              name="profileDropDown"
+            >
               <Avatar src={""} alt={""} radius="xl" size={30} />
               <Text size="sm" weight={600}>
                 {name}
@@ -75,7 +78,9 @@ const NavBar: FC<Props> = (props) => {
             </UnstyledButton>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item onClick={handleOnSignOut}>Sign Out</Menu.Item>
+            <Menu.Item name="signOutBtn" onClick={handleOnSignOut}>
+              Sign Out
+            </Menu.Item>
           </Menu.Dropdown>
         </Menu>
       </Group>
