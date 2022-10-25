@@ -26,5 +26,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/parsePosts.ts"],
-  "exclude": ["node_modules", "cypress"]
+  "exclude": ["node_modules", "cypress", "supabase"]
 }
