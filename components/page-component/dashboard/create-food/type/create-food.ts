@@ -1,7 +1,7 @@
 type CreateFoodType = {
   title: string;
   description: string;
-  coverPhoto: File;
+  coverPhoto: FileList;
   rate: number;
   isPublic: boolean;
 };

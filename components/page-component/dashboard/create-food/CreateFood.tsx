@@ -6,15 +6,17 @@ import {
   Button,
   Checkbox,
 } from "@mantine/core";
-import supabase from "@utils/supabase";
-import axios from "axios";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 import CreateFoodType from "./type/create-food";
+import axios from "axios";
+import Compressor from "compressorjs";
 
 const CreateFood: FC = () => {
   const router = useRouter();
+  const supabase = useSupabaseClient();
   const {
     register,
     formState: { errors, isSubmitting },
@@ -35,15 +37,25 @@ const CreateFood: FC = () => {
 
   const handleOnFoodSubmit = async () => {
     const { coverPhoto, ...rest } = getValues();
-    const image = await supabase.storage
-      .from("food/food_cover_photo")
-      .upload(`${Date.now()}-${coverPhoto.name}`, coverPhoto);
-    await axios.post("/api/create-food", {
-      ...rest,
-      coverPhoto: image.data?.path,
+
+    new Compressor(coverPhoto[0], {
+      quality: 0.1,
+      strict: true,
+      success: async (result) => {
+        const { data, error } = await supabase.functions.invoke(
+          "compress-image",
+          {
+            body: result,
+          }
+        );
+        await axios.post("/api/create-food", {
+          ...rest,
+          coverPhoto: data.data?.path,
+        });
+        router.push("/dashboard");
+        console.log({ data, error });
+      },
     });
-    router.push("/dashboard");
-    return;
   };
 
   return (
