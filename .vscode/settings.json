@@ -6,6 +6,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
-  },
-  "dotenv.enableAutocloaking": false
+  }
+  // "deno.enable": true,
+  // "deno.unstable": true
 }
