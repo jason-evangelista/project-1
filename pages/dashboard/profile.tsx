@@ -7,7 +7,7 @@ import { NextPage } from "next";
 import { Divider } from "@mantine/core";
 import { ApiQuota } from "@prisma/client";
 import DashBoardLayout from "@components/DashboardLayout";
-import Profile from "@components/page-component/dashboard/type/Profile";
+import Profile from "@components/page-component/dashboard/profile/Profile";
 import Head from "next/head";
 import prisma from "@prisma/prisma-client";
 

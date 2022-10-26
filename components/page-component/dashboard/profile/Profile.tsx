@@ -10,8 +10,8 @@ import {
 } from "@mantine/core";
 import { ApiQuota } from "@prisma/client";
 import { User } from "@supabase/auth-helpers-nextjs";
-import axios from "axios";
 import { FC, useState } from "react";
+import axios from "axios";
 
 type Props = {
   user: User;
