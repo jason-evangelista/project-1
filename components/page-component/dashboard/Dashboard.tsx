@@ -1,10 +1,8 @@
-import { Session } from "next-auth";
 import { FC } from "react";
 import { Center, Divider } from "@mantine/core";
 import FoodList from "./components/FoodList";
 import FoodListType from "./type/FoodListType";
 type Props = {
-  session?: Session;
   food: FoodListType[];
 };
 

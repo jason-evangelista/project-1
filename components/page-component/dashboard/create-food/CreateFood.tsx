@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import CreateFoodType from "./type/create-food";
 import axios from "axios";
 import Compressor from "compressorjs";
+import Notify from "@api/notify";
 
 const CreateFood: FC = () => {
   const router = useRouter();
@@ -48,12 +49,17 @@ const CreateFood: FC = () => {
             body: result,
           }
         );
+        if (error)
+          return Notify(
+            "Error saving the cover photo, Please try again",
+            null,
+            "error"
+          );
         await axios.post("/api/create-food", {
           ...rest,
           coverPhoto: data.data?.path,
         });
         router.push("/dashboard");
-        console.log({ data, error });
       },
     });
   };

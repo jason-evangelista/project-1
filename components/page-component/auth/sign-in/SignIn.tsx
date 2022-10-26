@@ -49,7 +49,7 @@ const SignIn: FC = () => {
   };
 
   const handleMagicLinkSignIn = async () => {
-    setIsMagicLinkSubmitting(!isMagicLinkSubmitting);
+    setIsMagicLinkSubmitting(true);
     const watchEmail = watch("email");
     if (!watchEmail) return Notify("Please provide an email", null, "error");
     const { email } = getValues();
@@ -59,9 +59,13 @@ const SignIn: FC = () => {
         emailRedirectTo: process.env.OAUTH_REDIRECT,
       },
     });
-    setIsMagicLinkSubmitting(!isMagicLinkSubmitting);
+    setIsMagicLinkSubmitting(false);
+    Notify("Magic link login was sent to your email.", null, "success");
 
-    if (error) return Notify(error.message, null, "error");
+    if (error) {
+      setIsMagicLinkSubmitting(false);
+      return Notify(error.message, null, "error");
+    }
   };
 
   const onSignIn = async () => {

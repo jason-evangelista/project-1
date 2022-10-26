@@ -1,9 +1,9 @@
 import { User } from "@supabase/auth-helpers-react";
 import { NextPage } from "next";
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import CreateFood from "@components/page-component/dashboard/create-food/CreateFood";
 import DashBoardLayout from "@components/DashboardLayout";
 import Head from "next/head";
-import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 
 export const getServerSideProps = withPageAuth({
   redirectTo: "/auth/sign-in",

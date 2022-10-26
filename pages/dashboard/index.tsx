@@ -13,7 +13,7 @@ export const getServerSideProps = withPageAuth({
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    console.log(user);
+
     const food = await prisma.food.findMany({
       include: {
         User: {

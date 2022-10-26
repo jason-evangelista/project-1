@@ -8,11 +8,12 @@ datasource db {
 }
 
 model UserProfile {
-  id         String   @id @default(uuid())
-  email      String   @unique
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id         String    @id @default(uuid())
+  email      String    @unique
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
   name       String
+  ApiQouta   ApiQuota?
   food       Food[]
 
   @@map("user_profile")
@@ -31,4 +32,18 @@ model Food {
   User        UserProfile @relation(fields: [user_id], references: [id])
 
   @@map("foods")
+}
+
+model ApiQuota {
+  id                  String      @id @unique @default(uuid())
+  apiKey              String?
+  apiCallLimit        Int         @default(20)
+  apiCallCoolDown     String?
+  fromUser            String      @unique
+  created_at          DateTime    @default(now())
+  updated_at          DateTime    @updatedAt
+  apiResetLimitInTime DateTime?
+  UserProfile         UserProfile @relation(fields: [fromUser], references: [id])
+
+  @@map("api_quota")
 }
