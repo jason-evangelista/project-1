@@ -78,6 +78,9 @@ const NavBar: FC<Props> = (props) => {
             </UnstyledButton>
           </Menu.Target>
           <Menu.Dropdown>
+            <Menu.Item component={NextLink} href="/dashboard/profile">
+              Profile
+            </Menu.Item>
             <Menu.Item name="signOutBtn" onClick={handleOnSignOut}>
               Sign Out
             </Menu.Item>
