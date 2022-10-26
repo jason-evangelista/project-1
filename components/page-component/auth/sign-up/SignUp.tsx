@@ -34,6 +34,7 @@ const SignUp: FC = () => {
     if (checkUser.count) return Notify("Email already exist", null, "error");
 
     const { error } = await supabaseClient.auth.signUp({ email, password });
+    console.log(error);
     if (error) return Notify(error.message, null, "error");
     router.push("/auth/sign-in");
     return;

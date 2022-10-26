@@ -75,6 +75,7 @@ const SignIn: FC = () => {
       email,
       password,
     });
+    console.log(error);
 
     if (error) return Notify(error?.message, null, "error");
     router.replace("/dashboard");
