@@ -31,8 +31,6 @@ const SignUp: FC = () => {
       .select("*")
       .eq("email", email);
 
-    console.log(checkUser);
-
     if (checkUser.count) return Notify("Email already exist", null, "error");
 
     const { error } = await supabaseClient.auth.signUp({ email, password });
