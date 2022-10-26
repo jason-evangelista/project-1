@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import CreateFoodType from "@components/page-component/dashboard/create-food/type/create-food";
 import prisma from "@prisma/prisma-client";
-import supabase from "@utils/supabase";
 
 const createFood = async (req: NextApiRequest, res: NextApiResponse) => {
   const supabaseServer = createServerSupabaseClient({ req, res });
@@ -11,7 +10,7 @@ const createFood = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!session.data.session)
     return res.status(401).json({ message: "Unauthorized" });
 
-  const user = await supabase.auth.admin.getUserById(
+  const user = await supabaseServer.auth.admin.getUserById(
     session.data.session.user.id
   );
 
@@ -24,7 +23,7 @@ const createFood = async (req: NextApiRequest, res: NextApiResponse) => {
     req.body as CreateFoodType;
 
   const parseCoverPhoto = coverPhoto as unknown as string;
-  const foodPublicImageUrl = await supabase.storage
+  const foodPublicImageUrl = await supabaseServer.storage
     .from("food/food_cover_photo")
     .createSignedUrl(parseCoverPhoto, 240 * 3600);
 
