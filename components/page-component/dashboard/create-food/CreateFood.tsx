@@ -12,7 +12,6 @@ import { FC } from "react";
 import { useForm } from "react-hook-form";
 import CreateFoodType from "./type/create-food";
 import axios from "axios";
-import Compressor from "compressorjs";
 import Notify from "@api/notify";
 
 const CreateFood: FC = () => {
@@ -38,30 +37,22 @@ const CreateFood: FC = () => {
 
   const handleOnFoodSubmit = async () => {
     const { coverPhoto, ...rest } = getValues();
-
-    new Compressor(coverPhoto[0], {
-      quality: 0.1,
-      strict: true,
-      success: async (result) => {
-        const { data, error } = await supabase.functions.invoke(
-          "compress-image",
-          {
-            body: result,
-          }
-        );
-        if (error)
-          return Notify(
-            "Error saving the cover photo, Please try again",
-            null,
-            "error"
-          );
-        await axios.post("/api/create-food", {
-          ...rest,
-          coverPhoto: data.data?.path,
-        });
-        router.push("/dashboard");
-      },
+    const { data, error } = await supabase.functions.invoke("compress-image", {
+      body: coverPhoto[0],
     });
+
+    if (error)
+      return Notify(
+        "Error saving the cover photo, Please try again",
+        null,
+        "error"
+      );
+
+    await axios.post("/api/create-food", {
+      ...rest,
+      coverPhoto: data.data?.path,
+    });
+    router.push("/dashboard");
   };
 
   return (

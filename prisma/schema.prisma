@@ -13,6 +13,7 @@ model UserProfile {
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   name       String
+  avatar_img String?
   ApiQouta   ApiQuota?
   food       Food[]
 

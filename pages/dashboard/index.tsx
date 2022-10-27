@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import { User } from "@supabase/auth-helpers-react";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
+import { UserProfile } from "@prisma/client";
 import Head from "next/head";
 import Dashboard from "@components/page-component/dashboard/Dashboard";
 import DashBoardLayout from "@components/DashboardLayout";
@@ -31,18 +32,25 @@ export const getServerSideProps = withPageAuth({
       (item) => item.user_id === user?.id || item.isPublic
     );
 
+    const userProfile = await prisma.userProfile.findUnique({
+      where: { id: user?.id },
+    });
+
     return {
       props: {
         food: JSON.parse(JSON.stringify(filteredFood)) as FoodListType[],
+        userProfile: JSON.parse(JSON.stringify(userProfile)) as UserProfile,
       },
     };
   },
 });
 
-const DashBoardPage: NextPage<{ user: User; food: FoodListType[] }> = (
-  props
-) => {
-  const { food, user } = props;
+const DashBoardPage: NextPage<{
+  user: User;
+  food: FoodListType[];
+  userProfile: UserProfile;
+}> = (props) => {
+  const { food, user, userProfile } = props;
 
   return (
     user && (
@@ -50,7 +58,7 @@ const DashBoardPage: NextPage<{ user: User; food: FoodListType[] }> = (
         <Head>
           <title>Dashboard</title>
         </Head>
-        <DashBoardLayout user={user}>
+        <DashBoardLayout userProfile={userProfile}>
           <Dashboard food={food} />
         </DashBoardLayout>
       </>

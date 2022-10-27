@@ -12,13 +12,14 @@ import { NextLink } from "@mantine/next";
 import { useRouter } from "next/router";
 import Notify from "@api/notify";
 import { useSessionContext } from "@supabase/auth-helpers-react";
+import { UserProfile } from "@prisma/client";
 
 type Props = {
-  name: string;
+  userProfile: UserProfile;
 };
 
 const NavBar: FC<Props> = (props) => {
-  const { name = "Jason Evangelista" } = props;
+  const { userProfile } = props;
   const { supabaseClient } = useSessionContext();
   const router = useRouter();
   const handleOnSignOut = async () => {
@@ -71,9 +72,14 @@ const NavBar: FC<Props> = (props) => {
               sx={{ display: "flex", alignItems: "center" }}
               name="profileDropDown"
             >
-              <Avatar src={""} alt={""} radius="xl" size={30} />
+              <Avatar
+                src={userProfile.avatar_img}
+                alt={userProfile.name}
+                radius="xl"
+                size={30}
+              />
               <Text size="sm" weight={600}>
-                {name}
+                {userProfile.name}
               </Text>
             </UnstyledButton>
           </Menu.Target>
