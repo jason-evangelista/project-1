@@ -2,18 +2,18 @@ import { FC, PropsWithChildren } from "react";
 import { Container } from "@mantine/core";
 
 import NavBar from "./Navbar";
-import { User } from "@supabase/auth-helpers-nextjs";
+import { UserProfile } from "@prisma/client";
 
 type Props = PropsWithChildren & {
-  user: User;
+  userProfile: UserProfile;
 };
 
 const DashBoardLayout: FC<Props> = (props) => {
-  const { user, children } = props;
-  if (!user) return null;
+  const { userProfile, children } = props;
+  if (!userProfile) return null;
   return (
     <>
-      <NavBar name={user.email || ""} />
+      <NavBar userProfile={userProfile} />
       <Container>{children}</Container>
     </>
   );
